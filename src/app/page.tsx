@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { KPICards } from "@/components/kpi-cards";
 import { StockChart } from "@/components/stock-chart";
 import { SentimentAlerts } from "@/components/sentiment-alerts";
 import { StrategicSuggestions } from "@/components/strategic-suggestions";
-import { BarChart3, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export default function Dashboard() {
   const [data, setData] = useState<any>(null);
@@ -32,14 +33,19 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/30">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-primary/10 p-2 rounded-md border border-primary/20">
-              <BarChart3 className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-foreground uppercase">Copper Giant</h1>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest leading-none">IR Dashboard</p>
+            <Image 
+              src="/logo.webp" 
+              alt="Copper Giant Logo" 
+              width={160} 
+              height={40} 
+              className="object-contain"
+              priority
+            />
+            <div className="hidden sm:block ml-4 pl-4 border-l border-border">
+              <h1 className="text-sm font-bold tracking-tight text-foreground uppercase">Monitoreo Bursátil</h1>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest leading-none">Relaciones con Inversores</p>
             </div>
           </div>
           <div className="flex items-center gap-4 text-sm font-medium text-muted-foreground">

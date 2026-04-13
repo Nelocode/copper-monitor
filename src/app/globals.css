@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-geist-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,68 +49,69 @@
 }
 
 :root {
-  /* Fondo muy oscuro / negro */
-  --background: #0a0a0c;
-  --foreground: #fafafa;
-  --card: #121214;
-  --card-foreground: #fafafa;
-  --popover: #121214;
-  --popover-foreground: #fafafa;
+  /* Fondo muy oscuro / negro puro basado en sitio de ref */
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
+  --popover: #0a0a0a;
+  --popover-foreground: #ffffff;
   
-  /* Cobre Metálico */
-  --primary: #c86a3e;
+  /* Rojo vibrante de las acciones en coppergiant */
+  --primary: #f91117;
   --primary-foreground: #ffffff;
   
-  /* Tonos neutros oscuros */
-  --secondary: #1a1a1e;
-  --secondary-foreground: #fafafa;
-  --muted: #1a1a1e;
+  /* Cobre para acentos secundarios / gradientes (#d4772c / #b87333) */
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a1a;
   --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #c86a3e;
+  --accent: #1a1a1a;
+  --accent-foreground: #d4772c;
   
   --destructive: #7f1d1d;
   --border: #27272a;
   --input: #27272a;
-  --ring: #c86a3e;
+  --ring: #f91117;
   
-  --chart-1: #c86a3e;
-  --chart-2: #8c4220;
-  --chart-3: #f59e0b;
+  /* Gráficos y data viz usando gradiente de cobre nativo */
+  --chart-1: #d4772c;
+  --chart-2: #b87333;
+  --chart-3: #f91117;
   --chart-4: #eab308;
   --chart-5: #10b981;
   --radius: 0.5rem;
   
-  --sidebar: #121214;
-  --sidebar-foreground: #fafafa;
-  --sidebar-primary: #c86a3e;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #f91117;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #27272a;
-  --sidebar-accent-foreground: #c86a3e;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #f91117;
   --sidebar-border: #27272a;
-  --sidebar-ring: #c86a3e;
+  --sidebar-ring: #f91117;
 }
 
 .dark {
   /* Same as root since it's an always dark dashboard */
-  --background: #0a0a0c;
-  --foreground: #fafafa;
-  --card: #121214;
-  --card-foreground: #fafafa;
-  --popover: #121214;
-  --popover-foreground: #fafafa;
-  --primary: #c86a3e;
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
+  --popover: #0a0a0a;
+  --popover-foreground: #ffffff;
+  --primary: #f91117;
   --primary-foreground: #ffffff;
-  --secondary: #1a1a1e;
-  --secondary-foreground: #fafafa;
-  --muted: #1a1a1e;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a1a;
   --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #c86a3e;
+  --accent: #1a1a1a;
+  --accent-foreground: #d4772c;
   --destructive: #7f1d1d;
   --border: #27272a;
   --input: #27272a;
-  --ring: #c86a3e;
+  --ring: #f91117;
 }
 
 @layer base {
