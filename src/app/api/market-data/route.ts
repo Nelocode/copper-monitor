@@ -5,51 +5,46 @@ const yahooFinance = new YahooFinance();
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const symbol = searchParams.get('symbol') || 'CGNT.V';
+  const interval = (searchParams.get('interval') as any) || '1d';
+  const range = searchParams.get('range') || '6mo';
+
   try {
-    // Definimos los símbolos (Tickers) según Yahoo Finance
-    const symbols = ['CGNT.V', 'LBCMF'];
+    // Fetch Current Quote and Chart data in parallel
+    const [quote, chartData] = await Promise.all([
+      yahooFinance.quote(symbol),
+      yahooFinance.chart(symbol, { 
+        period1: range === '6mo' ? new Date(Date.now() - 180 * 24 * 60 * 60 * 1000) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        interval 
+      })
+    ]);
 
-    const quotes = await Promise.all(
-      symbols.map((symbol) =>
-        yahooFinance.quote(symbol).catch((err) => {
-          console.error(`Failed to fetch ${symbol}:`, err);
-          return null;
-        })
-      )
-    );
-
-    const cgntData = quotes[0];
-    const lbcmfData = quotes[1];
-
-    // Datos históricos simulados pero estructurados reales para el gráfico de 6 meses
-    // En producción se cambiaría a `yahooFinance.historical`
-    const sixMonthsData = Array.from({ length: 30 }).map((_, i) => ({
-      date: new Date(Date.now() - (30 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      price: 0.5 + Math.random() * 0.3 + (i * 0.005), // Tendencia alcista leve
-      sma: 0.55 + Math.random() * 0.1 + (i * 0.004),
-    }));
+    // Format historical data for Lightweight Charts (OHLC)
+    const historical = chartData.quotes.map((q: any) => ({
+      time: Math.floor(new Date(q.date).getTime() / 1000), // Unix timestamp
+      open: q.open || q.close,
+      high: q.high || q.close,
+      low: q.low || q.close,
+      close: q.close,
+      volume: q.volume || 0,
+    })).filter(q => q.open !== null);
 
     return NextResponse.json({
       success: true,
-      cgnt: {
-        price: cgntData?.regularMarketPrice || 0.67,
-        currency: cgntData?.currency || 'CAD',
-        changePercent: cgntData?.regularMarketChangePercent || 2.4,
-        volume: cgntData?.regularMarketVolume || 1250000,
-        name: cgntData?.shortName || 'COPPER GIANT RESOURCES CORP',
+      symbol,
+      quote: {
+        price: quote?.regularMarketPrice || 0,
+        currency: quote?.currency || 'USD',
+        changePercent: quote?.regularMarketChangePercent || 0,
+        volume: quote?.regularMarketVolume || 0,
+        name: quote?.shortName || symbol,
       },
-      lbcmf: {
-        price: lbcmfData?.regularMarketPrice || 0.51,
-        currency: lbcmfData?.currency || 'USD',
-        changePercent: lbcmfData?.regularMarketChangePercent || 1.8,
-        volume: lbcmfData?.regularMarketVolume || 840000,
-        name: lbcmfData?.shortName || 'COPPER GIANT RESOURCES CORP',
-      },
-      historical: sixMonthsData,
+      historical,
     });
   } catch (error) {
-    console.error('Market data error:', error);
+    console.error(`Market data error for ${symbol}:`, error);
     return NextResponse.json({ success: false, error: 'Failed to fetch market data' }, { status: 500 });
   }
 }
