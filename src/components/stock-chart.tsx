@@ -45,7 +45,7 @@ export function StockChart({ data }: { data: any[] }) {
                 contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#27272a', borderRadius: '8px' }}
                 itemStyle={{ color: '#ffffff' }}
                 labelStyle={{ color: '#a1a1aa' }}
-                formatter={(value: number) => [`$${value.toFixed(3)}`, 'Precio']}
+                formatter={(value: any) => [`$${Number(value).toFixed(3)}`, 'Precio']}
                 labelFormatter={(label) => new Date(label).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
               />
               <Area 
