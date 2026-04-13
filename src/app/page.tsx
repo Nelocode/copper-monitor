@@ -5,9 +5,18 @@ import Image from "next/image";
 import { KPICards } from "@/components/kpi-cards";
 import { SentimentAlerts } from "@/components/sentiment-alerts";
 import { StrategicSuggestions } from "@/components/strategic-suggestions";
-import { ChartWindow } from "@/components/chart-window";
-import { Loader2, Plus, Monitor, Layout, Activity } from "lucide-react";
+import dynamic from "next/dynamic";
+import { Loader2, Plus, Monitor, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+const ChartWindow = dynamic(() => import("@/components/chart-window").then(mod => mod.ChartWindow), {
+  ssr: false,
+  loading: () => (
+    <div className="w-[300px] h-[250px] bg-card border border-border animate-pulse rounded-xl flex items-center justify-center">
+      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+    </div>
+  ),
+});
 
 interface WindowState {
   id: string;

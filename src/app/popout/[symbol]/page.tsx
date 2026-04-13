@@ -1,9 +1,14 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import { TradingChart } from "@/components/trading-chart";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+
+const TradingChart = dynamic(() => import("@/components/trading-chart").then(mod => mod.TradingChart), {
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center bg-black"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+});
 
 export default function PopoutChart({ params }: { params: Promise<{ symbol: string }> }) {
   const resolvedParams = use(params);
