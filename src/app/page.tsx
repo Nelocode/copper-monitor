@@ -30,6 +30,11 @@ export default function Dashboard() {
   const [masterData, setMasterData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [windows, setWindows] = useState<WindowState[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Fetch initial master data for KPIs and Sentiment
   useEffect(() => {
@@ -84,6 +89,8 @@ export default function Dashboard() {
       setTimeout(() => addChartWindow("LBCMF", "Copper Giant (OTCQB)"), 500);
     }
   }, [loading, addChartWindow]);
+
+  if (!isClient) return null;
 
   return (
     <div className="min-h-screen bg-[#000000] text-foreground font-sans selection:bg-primary/30 overflow-hidden flex flex-col">
