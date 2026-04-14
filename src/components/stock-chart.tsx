@@ -21,8 +21,8 @@ export function StockChart({ data }: { data: any[] }) {
             >
               <defs>
                 <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#d4772c" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#b87333" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#26a69a" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#26a69a" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
@@ -51,7 +51,7 @@ export function StockChart({ data }: { data: any[] }) {
               <Area 
                 type="monotone" 
                 dataKey="price" 
-                stroke="#f91117" 
+                stroke="#26a69a"
                 strokeWidth={2}
                 fillOpacity={1} 
                 fill="url(#colorPrice)" 

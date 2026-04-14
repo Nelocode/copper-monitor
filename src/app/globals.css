@@ -61,13 +61,13 @@
   --primary: #f91117;
   --primary-foreground: #ffffff;
   
-  /* Cobre para acentos secundarios / gradientes (#d4772c / #b87333) */
+  /* Verde para acentos secundarios / gradientes */
   --secondary: #1a1a1a;
   --secondary-foreground: #ffffff;
   --muted: #1a1a1a;
   --muted-foreground: #a1a1aa;
   --accent: #1a1a1a;
-  --accent-foreground: #d4772c;
+  --accent-foreground: #26a69a;
   
   --destructive: #7f1d1d;
   --border: #27272a;
@@ -75,8 +75,8 @@
   --ring: #f91117;
   
   /* Gráficos y data viz usando gradiente de cobre nativo */
-  --chart-1: #d4772c;
-  --chart-2: #b87333;
+  --chart-1: #26a69a;
+  --chart-2: #2196f3;
   --chart-3: #f91117;
   --chart-4: #eab308;
   --chart-5: #10b981;
@@ -107,7 +107,7 @@
   --muted: #1a1a1a;
   --muted-foreground: #a1a1aa;
   --accent: #1a1a1a;
-  --accent-foreground: #d4772c;
+  --accent-foreground: #26a69a;
   --destructive: #7f1d1d;
   --border: #27272a;
   --input: #27272a;
