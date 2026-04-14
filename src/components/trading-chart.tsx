@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createChart, ColorType, IChartApi, ISeriesApi, CandlestickData, LineData } from "lightweight-charts";
+import { createChart, ColorType, IChartApi, ISeriesApi, CandlestickData, LineData, CandlestickSeries, AreaSeries } from "lightweight-charts";
 
 interface TradingChartProps {
   data: any[];
@@ -54,7 +54,7 @@ export function TradingChart({ data, type = "candle", height = 400 }: TradingCha
     chartRef.current = chart;
 
     if (type === "candle") {
-      const candleSeries = (chart as any).addCandlestickSeries({
+      const candleSeries = chart.addSeries(CandlestickSeries, {
         upColor: "#d4772c",
         downColor: "#f91117",
         borderDownColor: "#f91117",
@@ -63,16 +63,16 @@ export function TradingChart({ data, type = "candle", height = 400 }: TradingCha
         wickUpColor: "#d4772c",
       });
       candleSeries.setData(data as CandlestickData[]);
-      seriesRef.current = candleSeries;
+      seriesRef.current = candleSeries as any;
     } else {
-      const areaSeries = (chart as any).addAreaSeries({
+      const areaSeries = chart.addSeries(AreaSeries, {
         lineColor: "#f91117",
         topColor: "rgba(249, 17, 23, 0.4)",
         bottomColor: "rgba(249, 17, 23, 0)",
         lineWidth: 2,
       });
       areaSeries.setData(data.map(d => ({ time: d.time, value: d.close })) as LineData[]);
-      seriesRef.current = areaSeries;
+      seriesRef.current = areaSeries as any;
     }
 
     const handleResize = () => {
