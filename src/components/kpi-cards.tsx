@@ -41,7 +41,7 @@ export function KPICards({ data }: { data: KPIData }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {renderCard("CGNT.V (TSX-V)", data.cgnt)}
-      {renderCard("OCG.V (TSX-V)", data.ocg)}
+      {renderCard("OCG (TSX)", data.ocg)}
       <Card className="bg-card/50 backdrop-blur-md border-border">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-widest">

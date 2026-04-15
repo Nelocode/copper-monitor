@@ -45,7 +45,7 @@ export default function Dashboard() {
       try {
         const [res1, res2] = await Promise.allSettled([
           fetch("/api/market-data?symbol=CGNT.V").then(r => r.json()),
-          fetch("/api/market-data?symbol=OCG.V").then(r => r.json()),
+          fetch("/api/market-data?symbol=OCG.TO").then(r => r.json()),
         ]);
 
         const json1 = res1.status === 'fulfilled' ? res1.value : null;
@@ -98,7 +98,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!loading && windows.length === 0) {
       addChartWindow("CGNT.V", "Copper Giant (TSXV)");
-      setTimeout(() => addChartWindow("OCG.V", "Outcrop Silver (TSXV)"), 500);
+      setTimeout(() => addChartWindow("OCG.TO", "Outcrop Silver (TSX)"), 500);
     }
   }, [loading, windows.length, addChartWindow]);
 
@@ -156,7 +156,7 @@ export default function Dashboard() {
                   <KPICards data={masterData} />
                 </div>
                 {masterData.cgnt && <BidAskWidget symbol="CGNT.V" quote={masterData.cgnt} />}
-                {masterData.ocg  && <BidAskWidget symbol="OCG.V"  quote={masterData.ocg}  />}
+                {masterData.ocg  && <BidAskWidget symbol="OCG.TO" quote={masterData.ocg}  />}
               </div>
             )}
 
