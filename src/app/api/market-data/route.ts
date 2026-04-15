@@ -12,13 +12,20 @@ export async function GET(request: Request) {
   const range = searchParams.get('range') || '6mo';
 
   try {
+    const rangeMap: Record<string, number> = {
+      '1mo':  30,
+      '3mo':  90,
+      '6mo': 180,
+      '1y':  365,
+      '2y':  730,
+    };
+    const days = rangeMap[range] ?? 180;
+    const period1 = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
     // Fetch Current Quote and Chart data in parallel
     const [quote, chartData] = await Promise.all([
       yahooFinance.quote(symbol),
-      yahooFinance.chart(symbol, { 
-        period1: range === '6mo' ? new Date(Date.now() - 180 * 24 * 60 * 60 * 1000) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        interval 
-      })
+      yahooFinance.chart(symbol, { period1, interval })
     ]);
 
     // Format historical data for Lightweight Charts (OHLC)

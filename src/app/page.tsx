@@ -23,8 +23,6 @@ interface WindowState {
   id: string;
   symbol: string;
   title: string;
-  data: any[];
-  loading: boolean;
 }
 
 const SOCIAL_POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
@@ -87,20 +85,9 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  const addChartWindow = useCallback(async (symbol: string, title: string) => {
+  const addChartWindow = useCallback((symbol: string, title: string) => {
     const id = `${symbol}-${Date.now()}`;
-    const newWindow: WindowState = { id, symbol, title, data: [], loading: true };
-    setWindows(prev => [...prev, newWindow]);
-
-    try {
-      const res = await fetch(`/api/market-data?symbol=${symbol}&range=6mo`);
-      const json = await res.json();
-      if (json.success) {
-        setWindows(prev => prev.map(w => w.id === id ? { ...w, data: json.historical, loading: false } : w));
-      }
-    } catch (err) {
-      console.error(`Failed to load window data for ${symbol}`, err);
-    }
+    setWindows(prev => [...prev, { id, symbol, title }]);
   }, []);
 
   const closeWindow = (id: string) => {
@@ -202,8 +189,6 @@ export default function Dashboard() {
                   id={win.id}
                   symbol={win.symbol}
                   title={win.title}
-                  data={win.data}
-                  loading={win.loading}
                   onClose={closeWindow}
                   defaultPosition={{ x: 20 + (idx * 40), y: 20 + (idx * 40) }}
                 />
