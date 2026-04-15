@@ -13,6 +13,8 @@ export async function GET(request: Request) {
 
   try {
     const rangeMap: Record<string, number> = {
+      '1d':    2,   // 2 days back to always capture today's session
+      '5d':    5,
       '1mo':  30,
       '3mo':  90,
       '6mo': 180,
