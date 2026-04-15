@@ -7,6 +7,7 @@ import { SentimentAlerts } from "@/components/sentiment-alerts";
 import { StrategicSuggestions } from "@/components/strategic-suggestions";
 import { SocialFeed } from "@/components/social-feed";
 import { BidAskWidget } from "@/components/bid-ask-widget";
+import { MarketChat } from "@/components/market-chat";
 import dynamic from "next/dynamic";
 import { Loader2, Monitor, Activity } from "lucide-react";
 
@@ -209,6 +210,9 @@ export default function Dashboard() {
           PROPRIETARY MULTIMODAL INTERFACE V.2.1
         </div>
       </footer>
+      {/* AI Market Chat - fixed bottom panel */}
+      <MarketChat marketData={masterData ?? undefined} />
+
     </div>
   );
 }
