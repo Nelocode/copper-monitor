@@ -45,18 +45,20 @@ export default function Dashboard() {
   useEffect(() => {
     async function loadMasterData() {
       try {
-        const [res1, res2] = await Promise.all([
-          fetch("/api/market-data?symbol=CGNT.V"),
-          fetch("/api/market-data?symbol=OCG.V")
+        const [res1, res2] = await Promise.allSettled([
+          fetch("/api/market-data?symbol=CGNT.V").then(r => r.json()),
+          fetch("/api/market-data?symbol=OCG.V").then(r => r.json()),
         ]);
-        const json1 = await res1.json();
-        const json2 = await res2.json();
-        
-        if (json1.success && json2.success) {
-          setMasterData({
-            cgnt: json1.quote,
-            ocg: json2.quote,
-          });
+
+        const json1 = res1.status === 'fulfilled' ? res1.value : null;
+        const json2 = res2.status === 'fulfilled' ? res2.value : null;
+
+        const cgnt = json1?.success ? json1.quote : null;
+        const ocg  = json2?.success ? json2.quote : null;
+
+        // Surface whatever data we have — don't block intelligence on both succeeding
+        if (cgnt || ocg) {
+          setMasterData({ cgnt, ocg });
         }
       } catch (err) {
         console.error("Failed to load master data", err);
@@ -201,6 +203,7 @@ export default function Dashboard() {
                   symbol={win.symbol}
                   title={win.title}
                   data={win.data}
+                  loading={win.loading}
                   onClose={closeWindow}
                   defaultPosition={{ x: 20 + (idx * 40), y: 20 + (idx * 40) }}
                 />

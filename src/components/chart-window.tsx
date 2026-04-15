@@ -3,20 +3,21 @@
 import { useState } from "react";
 import { Rnd } from "react-rnd";
 import { TradingChart } from "./trading-chart";
-import { X, BarChart2, CandlestickChart, ExternalLink } from "lucide-react";
+import { X, BarChart2, CandlestickChart, ExternalLink, Loader2, WifiOff } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface ChartWindowProps {
   id: string;
   symbol: string;
   data: any[];
+  loading?: boolean;
   title: string;
   onClose: (id: string) => void;
   defaultPosition?: { x: number, y: number };
   defaultSize?: { width: number, height: number };
 }
 
-export function ChartWindow({ id, symbol, data, title, onClose, defaultPosition, defaultSize }: ChartWindowProps) {
+export function ChartWindow({ id, symbol, data, loading = false, title, onClose, defaultPosition, defaultSize }: ChartWindowProps) {
   const [chartType, setChartType] = useState<"candle" | "area">("candle");
 
   const handlePopOut = () => {
@@ -85,8 +86,21 @@ export function ChartWindow({ id, symbol, data, title, onClose, defaultPosition,
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-2 bg-background/20">
-          <TradingChart data={data} type={chartType} />
+        <div className="flex-1 p-2 bg-background/20 relative">
+          {loading ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">Cargando datos...</span>
+            </div>
+          ) : data.length === 0 ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center px-4">
+              <WifiOff className="h-6 w-6 text-muted-foreground/40" />
+              <span className="text-[10px] font-mono text-muted-foreground/60 uppercase tracking-widest">Sin datos disponibles</span>
+              <span className="text-[9px] text-muted-foreground/40 font-mono">{symbol} · Yahoo Finance no disponible</span>
+            </div>
+          ) : (
+            <TradingChart data={data} type={chartType} />
+          )}
         </div>
         
         {/* Footer / Status */}

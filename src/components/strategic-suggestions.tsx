@@ -15,8 +15,8 @@ interface MarketQuote {
 
 interface StrategicSuggestionsProps {
   data?: {
-    cgnt: MarketQuote;
-    ocg: MarketQuote;
+    cgnt: MarketQuote | null;
+    ocg: MarketQuote | null;
   } | null;
 }
 
@@ -123,8 +123,11 @@ const ToneIcon: Record<SuggestionTone, React.ElementType> = {
 
 export function StrategicSuggestions({ data }: StrategicSuggestionsProps) {
   const suggestion = useMemo(() => {
-    if (!data?.cgnt || !data?.ocg) return null;
-    return generateSuggestion(data.cgnt, data.ocg);
+    if (!data?.cgnt && !data?.ocg) return null;
+    // Use CGNT as primary, OCG as fallback/default
+    const cgnt = data!.cgnt!
+    const ocg: MarketQuote = data!.ocg ?? { price: 0, currency: cgnt.currency, changePercent: 0, volume: 0, name: 'OCG.V' };
+    return generateSuggestion(cgnt, ocg);
   }, [data]);
 
   if (!suggestion) {
