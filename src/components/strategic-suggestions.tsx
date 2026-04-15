@@ -142,7 +142,7 @@ export function StrategicSuggestions({ data }: StrategicSuggestionsProps) {
       <AlertTitle className="flex items-center gap-3 flex-wrap">
         <span className="text-lg font-semibold text-foreground">{suggestion.title}</span>
         <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded border ml-auto ${cfg.badge}`}>
-          {suggestion.badgeText}
+          {cfg.badgeText}
         </span>
       </AlertTitle>
       <AlertDescription className="mt-2 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
