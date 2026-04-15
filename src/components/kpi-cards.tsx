@@ -2,14 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUpRight, ArrowDownRight, Activity } from "lucide-react";
 
 interface KPIData {
-  cgnt: any;
-  ocg: any;
+  cgnt: any | null;
+  ocg: any | null;
 }
 
 export function KPICards({ data }: { data: KPIData }) {
   if (!data) return null;
 
   const renderCard = (ticker: string, stock: any) => {
+    if (!stock) return null;
     const isPositive = stock.changePercent >= 0;
     const ChangeIcon = isPositive ? ArrowUpRight : ArrowDownRight;
     const changeColor = isPositive ? "text-emerald-500" : "text-destructive";
@@ -35,6 +36,8 @@ export function KPICards({ data }: { data: KPIData }) {
     );
   };
 
+  const combinedVolume = (data.cgnt?.volume || 0) + (data.ocg?.volume || 0);
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {renderCard("CGNT.V (TSX-V)", data.cgnt)}
@@ -48,7 +51,7 @@ export function KPICards({ data }: { data: KPIData }) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {((data.cgnt.volume || 0) + (data.ocg.volume || 0)).toLocaleString()}
+            {combinedVolume.toLocaleString()}
           </div>
           <p className="text-xs text-muted-foreground mt-1">Acciones negociadas hoy</p>
         </CardContent>

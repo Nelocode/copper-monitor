@@ -168,8 +168,8 @@ export default function Dashboard() {
                 <div className="lg:col-span-3">
                   <KPICards data={masterData} />
                 </div>
-                <BidAskWidget symbol="CGNT.V" quote={masterData.cgnt} />
-                <BidAskWidget symbol="OCG.V"  quote={masterData.ocg}  />
+                {masterData.cgnt && <BidAskWidget symbol="CGNT.V" quote={masterData.cgnt} />}
+                {masterData.ocg  && <BidAskWidget symbol="OCG.V"  quote={masterData.ocg}  />}
               </div>
             )}
 
