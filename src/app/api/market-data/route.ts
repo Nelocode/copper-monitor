@@ -40,6 +40,14 @@ export async function GET(request: Request) {
         changePercent: quote?.regularMarketChangePercent || 0,
         volume: quote?.regularMarketVolume || 0,
         name: quote?.shortName || symbol,
+        bid: quote?.bid ?? null,
+        ask: quote?.ask ?? null,
+        bidSize: quote?.bidSize ?? null,   // in hundreds (board lots)
+        askSize: quote?.askSize ?? null,
+        dayHigh: quote?.regularMarketDayHigh ?? null,
+        dayLow: quote?.regularMarketDayLow ?? null,
+        open: quote?.regularMarketOpen ?? null,
+        previousClose: quote?.regularMarketPreviousClose ?? null,
       },
       historical,
     });

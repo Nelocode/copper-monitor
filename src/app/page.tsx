@@ -5,6 +5,8 @@ import Image from "next/image";
 import { KPICards } from "@/components/kpi-cards";
 import { SentimentAlerts } from "@/components/sentiment-alerts";
 import { StrategicSuggestions } from "@/components/strategic-suggestions";
+import { SocialFeed } from "@/components/social-feed";
+import { BidAskWidget } from "@/components/bid-ask-widget";
 import dynamic from "next/dynamic";
 import { Loader2, Monitor, Activity } from "lucide-react";
 
@@ -25,17 +27,21 @@ interface WindowState {
   loading: boolean;
 }
 
+const SOCIAL_POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
 export default function Dashboard() {
   const [masterData, setMasterData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const [socialData, setSocialData] = useState<any>(null);
+  const [socialLoading, setSocialLoading] = useState(true);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Fetch initial master data for KPIs and Sentiment
+  // Fetch market data for KPIs
   useEffect(() => {
     async function loadMasterData() {
       try {
@@ -59,6 +65,24 @@ export default function Dashboard() {
       }
     }
     loadMasterData();
+  }, []);
+
+  // Fetch + poll social sentiment data
+  useEffect(() => {
+    async function fetchSocial() {
+      try {
+        const res = await fetch("/api/social-sentiment");
+        const json = await res.json();
+        if (json.success) setSocialData(json);
+      } catch (err) {
+        console.error("Failed to load social data", err);
+      } finally {
+        setSocialLoading(false);
+      }
+    }
+    fetchSocial();
+    const interval = setInterval(fetchSocial, SOCIAL_POLL_INTERVAL);
+    return () => clearInterval(interval);
   }, []);
 
   const addChartWindow = useCallback(async (symbol: string, title: string) => {
@@ -134,20 +158,38 @@ export default function Dashboard() {
             <p className="text-muted-foreground animate-pulse font-mono text-xs uppercase tracking-widest">Iniciando Espacio de Trabajo...</p>
           </div>
         ) : (
-          <div className="h-full flex flex-col gap-6 overflow-y-auto no-scrollbar">
+          <div className="h-full flex flex-col gap-4 overflow-y-auto no-scrollbar">
             
-            {/* KPI Cards section (Static at top) */}
+            {/* Row 1: KPI Cards + BidAsk widgets */}
             {masterData && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-4 duration-1000">
-                <KPICards data={masterData} />
-                <div className="lg:col-span-2">
-                    <StrategicSuggestions data={masterData} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 animate-in fade-in slide-in-from-top-4 duration-1000">
+                <div className="lg:col-span-3">
+                  <KPICards data={masterData} />
                 </div>
+                <BidAskWidget symbol="CGNT.V" quote={masterData.cgnt} />
+                <BidAskWidget symbol="OCG.V"  quote={masterData.ocg}  />
               </div>
             )}
 
-            {/* Draggable Area - This takes the remaining space */}
-            <div className="relative flex-1 min-h-[800px] border border-dashed border-border/30 rounded-2xl bg-gradient-to-b from-transparent to-secondary/5">
+            {/* Row 2: Strategic Suggestion (full width) */}
+            {masterData && (
+              <div className="animate-in fade-in slide-in-from-top-4 duration-1000 delay-100">
+                <StrategicSuggestions data={masterData} />
+              </div>
+            )}
+
+            {/* Row 3: Social Feed + Sentiment Alerts (side by side) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-4 duration-1000 delay-150">
+              <div className="lg:col-span-2">
+                <SocialFeed data={socialData} loading={socialLoading} />
+              </div>
+              <div>
+                <SentimentAlerts data={masterData} />
+              </div>
+            </div>
+
+            {/* Row 4: Draggable Chart Workspace */}
+            <div className="relative flex-1 min-h-[700px] border border-dashed border-border/30 rounded-2xl bg-gradient-to-b from-transparent to-secondary/5">
               <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
                 <Monitor className="w-96 h-96" />
               </div>
@@ -163,10 +205,6 @@ export default function Dashboard() {
                   defaultPosition={{ x: 20 + (idx * 40), y: 20 + (idx * 40) }}
                 />
               ))}
-
-              <div className="absolute bottom-10 right-10 flex flex-col gap-4 max-w-sm">
-                <SentimentAlerts data={masterData} />
-              </div>
             </div>
           </div>
         )}
