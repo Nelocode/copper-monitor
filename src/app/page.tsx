@@ -141,7 +141,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-4 duration-1000">
                 <KPICards data={masterData} />
                 <div className="lg:col-span-2">
-                    <StrategicSuggestions />
+                    <StrategicSuggestions data={masterData} />
                 </div>
               </div>
             )}
@@ -165,7 +165,7 @@ export default function Dashboard() {
               ))}
 
               <div className="absolute bottom-10 right-10 flex flex-col gap-4 max-w-sm">
-                <SentimentAlerts />
+                <SentimentAlerts data={masterData} />
               </div>
             </div>
           </div>
