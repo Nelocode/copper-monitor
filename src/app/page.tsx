@@ -6,8 +6,7 @@ import { KPICards } from "@/components/kpi-cards";
 import { SentimentAlerts } from "@/components/sentiment-alerts";
 import { StrategicSuggestions } from "@/components/strategic-suggestions";
 import dynamic from "next/dynamic";
-import { Loader2, Plus, Monitor, Activity } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2, Monitor, Activity } from "lucide-react";
 
 const ChartWindow = dynamic(() => import("@/components/chart-window").then(mod => mod.ChartWindow), {
   ssr: false,
@@ -42,7 +41,7 @@ export default function Dashboard() {
       try {
         const [res1, res2] = await Promise.all([
           fetch("/api/market-data?symbol=CGNT.V"),
-          fetch("/api/market-data?symbol=LBCMF")
+          fetch("/api/market-data?symbol=OCG.V")
         ]);
         const json1 = await res1.json();
         const json2 = await res2.json();
@@ -50,7 +49,7 @@ export default function Dashboard() {
         if (json1.success && json2.success) {
           setMasterData({
             cgnt: json1.quote,
-            lbcmf: json2.quote,
+            ocg: json2.quote,
           });
         }
       } catch (err) {
@@ -86,9 +85,9 @@ export default function Dashboard() {
   useEffect(() => {
     if (!loading && windows.length === 0) {
       addChartWindow("CGNT.V", "Copper Giant (TSXV)");
-      setTimeout(() => addChartWindow("LBCMF", "Copper Giant (OTCQB)"), 500);
+      setTimeout(() => addChartWindow("OCG.V", "Outcrop Silver (TSXV)"), 500);
     }
-  }, [loading, addChartWindow]);
+  }, [loading, windows.length, addChartWindow]);
 
   if (!isClient) return null;
 
@@ -118,15 +117,6 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="bg-primary/10 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all"
-              onClick={() => addChartWindow("HG=F", "Cobre Spot (HG=F)")}
-            >
-              <Plus className="mr-2 h-4 w-4" /> Nuevo Gráfico
-            </Button>
-            <div className="h-8 w-[1px] bg-border mx-2" />
             {loading ? (
               <span className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="h-3 w-3 animate-spin"/> Syncing</span>
             ) : (

@@ -3,7 +3,7 @@ import { ArrowUpRight, ArrowDownRight, Activity } from "lucide-react";
 
 interface KPIData {
   cgnt: any;
-  lbcmf: any;
+  ocg: any;
 }
 
 export function KPICards({ data }: { data: KPIData }) {
@@ -38,7 +38,7 @@ export function KPICards({ data }: { data: KPIData }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {renderCard("CGNT.V (TSX-V)", data.cgnt)}
-      {renderCard("LBCMF (OTC)", data.lbcmf)}
+      {renderCard("OCG.V (TSX-V)", data.ocg)}
       <Card className="bg-card/50 backdrop-blur-md border-border">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
@@ -48,7 +48,7 @@ export function KPICards({ data }: { data: KPIData }) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {((data.cgnt.volume || 0) + (data.lbcmf.volume || 0)).toLocaleString()}
+            {((data.cgnt.volume || 0) + (data.ocg.volume || 0)).toLocaleString()}
           </div>
           <p className="text-xs text-muted-foreground mt-1">Acciones negociadas hoy</p>
         </CardContent>

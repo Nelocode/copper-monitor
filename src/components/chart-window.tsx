@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Rnd } from "react-rnd";
 import { TradingChart } from "./trading-chart";
-import { Maximize2, X, BarChart2, CandlestickChart, ExternalLink } from "lucide-react";
+import { X, BarChart2, CandlestickChart, ExternalLink } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface ChartWindowProps {
@@ -18,7 +18,6 @@ interface ChartWindowProps {
 
 export function ChartWindow({ id, symbol, data, title, onClose, defaultPosition, defaultSize }: ChartWindowProps) {
   const [chartType, setChartType] = useState<"candle" | "area">("candle");
-  const [isMinimized, setIsMinimized] = useState(false);
 
   const handlePopOut = () => {
     const width = 800;
