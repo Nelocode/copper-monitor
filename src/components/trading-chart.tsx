@@ -55,12 +55,12 @@ export function TradingChart({ data, type = "candle", height = 400 }: TradingCha
 
     if (type === "candle") {
       const candleSeries = chart.addSeries(CandlestickSeries, {
-        upColor: "#d4772c",
-        downColor: "#f91117",
-        borderDownColor: "#f91117",
-        borderUpColor: "#d4772c",
-        wickDownColor: "#f91117",
-        wickUpColor: "#d4772c",
+        upColor: "#26a69a",
+        downColor: "#ef5350",
+        borderDownColor: "#ef5350",
+        borderUpColor: "#26a69a",
+        wickDownColor: "#ef5350",
+        wickUpColor: "#26a69a",
       });
       candleSeries.setData(data as CandlestickData[]);
       seriesRef.current = candleSeries as any;
