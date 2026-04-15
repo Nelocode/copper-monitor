@@ -1,9 +1,10 @@
 "use client";
 
+import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Lightbulb, ArrowRight, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 
 interface MarketQuote {
   price: number;
@@ -18,6 +19,8 @@ interface StrategicSuggestionsProps {
     cgnt: MarketQuote | null;
     ocg: MarketQuote | null;
   } | null;
+  /** Called when user clicks an analysis CTA — receives the primary symbol */
+  onOpenChart?: (symbol: string) => void;
 }
 
 type SuggestionTone = "bullish" | "bearish" | "neutral" | "opportunity";
@@ -121,13 +124,58 @@ const ToneIcon: Record<SuggestionTone, React.ElementType> = {
   neutral: Minus,
 };
 
-export function StrategicSuggestions({ data }: StrategicSuggestionsProps) {
+export function StrategicSuggestions({ data, onOpenChart }: StrategicSuggestionsProps) {
   const suggestion = useMemo(() => {
-    if (!data?.cgnt) return null; // CGNT is required as primary signal
+    if (!data?.cgnt) return null;
     const cgnt = data.cgnt;
-    const ocg: MarketQuote = data.ocg ?? { price: 0, currency: cgnt.currency, changePercent: 0, volume: 0, name: 'OCG.V' };
+    const ocg: MarketQuote = data.ocg ?? { price: 0, currency: cgnt.currency, changePercent: 0, volume: 0, name: 'OCG.TO' };
     return generateSuggestion(cgnt, ocg);
   }, [data]);
+
+  const handleCTA = useCallback(() => {
+    if (!suggestion) return;
+    const cgntSymbol = "CGNT.V";
+
+    switch (suggestion.cta) {
+      case "Ver Análisis Técnico":
+        // Open TradingView full chart for CGNT.V
+        if (onOpenChart) {
+          onOpenChart(cgntSymbol);
+        } else {
+          window.open(
+            `https://www.tradingview.com/chart/?symbol=TSXV%3ACGNT`,
+            `TV_Analysis_${Date.now()}`,
+            "width=1200,height=750,resizable=yes,menubar=no,toolbar=no"
+          );
+        }
+        break;
+
+      case "Preparar Comunicado":
+      case "Ver Presentación Corporativa":
+        window.open("https://www.prnewswire.com/", "_blank", "noopener");
+        break;
+
+      case "Ver Estrategia de Contenido":
+        // Open StockHouse for CGNT.V community
+        window.open("https://www.stockhouse.com/companies/bullboard/v.cgnt/copper-giant-resources-corp", "_blank", "noopener");
+        break;
+
+      case "Revisar Deck Inversores":
+        // Open company investor relations
+        window.open("https://coppergiantresources.com/", "_blank", "noopener");
+        break;
+
+      case "Revisar Hitos Pendientes":
+      case "Revisar Calendario IR":
+        // Open the SEDAR filing page for recent news releases
+        window.open("https://www.sedarplus.ca/csa-party/party/documents.html?id=0004b437c8afd9a5dde6024dfc6b5cacc91a82d1f895db37e68c4aea5ea74e8e", "_blank", "noopener");
+        break;
+
+      default:
+        // Fallback: open TradingView
+        window.open(`https://www.tradingview.com/chart/?symbol=TSXV%3ACGNT`, "_blank", "noopener");
+    }
+  }, [suggestion, onOpenChart]);
 
   if (!suggestion) {
     return (
@@ -154,7 +202,8 @@ export function StrategicSuggestions({ data }: StrategicSuggestionsProps) {
         <Button
           variant="outline"
           size="sm"
-          className={`shrink-0 border ${cfg.badge} hover:bg-white/5 transition-all`}
+          onClick={handleCTA}
+          className={`shrink-0 border ${cfg.badge} hover:bg-white/5 transition-all cursor-pointer`}
         >
           {suggestion.cta} <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
