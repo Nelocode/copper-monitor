@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 
-export const revalidate = 300; // 5 minutes
+export const dynamic = 'force-dynamic';
 
 async function fetchStockTwits(symbol: string) {
   const res = await fetch(
     `https://api.stocktwits.com/api/2/streams/symbol/${symbol}.json?limit=15`,
     {
       headers: { 'User-Agent': 'copper-monitor/1.0 IR Terminal' },
-      next: { revalidate: 300 },
+      cache: 'no-store',
     }
   );
   if (!res.ok) throw new Error(`StockTwits error: ${res.status}`);
@@ -33,7 +33,7 @@ async function fetchReddit(query: string) {
         'User-Agent': 'copper-monitor/1.0 (IR Terminal for CGNT.V)',
         'Accept': 'application/json',
       },
-      next: { revalidate: 300 },
+      cache: 'no-store',
     }
   );
   if (!res.ok) throw new Error(`Reddit error: ${res.status}`);

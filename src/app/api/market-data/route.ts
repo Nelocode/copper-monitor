@@ -3,7 +3,7 @@ import YahooFinance from 'yahoo-finance2';
 
 const yahooFinance = new YahooFinance({ suppressNotices: ['yahooSurvey'] });
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 // ─── Twelve Data quote fetcher ───────────────────────────────────────────────
 async function fetchFromTwelveData(symbol: string, apiKey: string) {
@@ -18,7 +18,7 @@ async function fetchFromTwelveData(symbol: string, apiKey: string) {
   const params = new URLSearchParams({ symbol: ticker, apikey: apiKey });
   if (exchange) params.set("exchange", exchange);
 
-  const res  = await fetch(`https://api.twelvedata.com/quote?${params}`, { next: { revalidate: 60 } });
+  const res  = await fetch(`https://api.twelvedata.com/quote?${params}`, { cache: 'no-store' });
   const data = await res.json();
 
   if (data.code || !data.close) {
