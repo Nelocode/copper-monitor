@@ -4,15 +4,15 @@ const nextConfig: NextConfig = {
   output: "standalone",
   compress: false,
   // Allow TradingView iframes and external resources
+  // Allow embedding from the Copper Giant Hub
   async headers() {
     return [
       {
         source: "/:path*",
         headers: [
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
+          // ⚠️  X-Frame-Options REMOVED intentionally.
+          // We use CSP frame-ancestors instead (more precise control).
+          // This allows the Hub at hub.soluciones.coppergiant.co to embed this app.
           {
             key: "Content-Security-Policy",
             value: [
@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
               "connect-src 'self' https://api.twelvedata.com https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://finance.yahoo.com wss://streamer.finance.yahoo.com",
               "frame-src 'self' https://s.tradingview.com https://www.tradingview.com",
               "media-src 'self'",
+              // Allow the Hub to embed this app in an iframe
+              "frame-ancestors 'self' https://hub.soluciones.coppergiant.co https://*.easypanel.host",
             ].join("; "),
           },
         ],
